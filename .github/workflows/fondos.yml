@@ -1,0 +1,30 @@
+name: Ejecutar scraper de fondos
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '38 18 * * *'   # 8:00 a.m. Colombia (UTC-5)
+
+jobs:
+  scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas beautifulsoup4 playwright
+
+      - name: Instalar Chromium
+        run: playwright install chromium
+
+      - name: Ejecutar scraper
+        run: python nombre_de_tu_script.py
