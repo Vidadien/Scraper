@@ -1,5 +1,8 @@
 name: Ejecutar scraper de fondos
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   schedule:
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Instalar Python
         uses: actions/setup-python@v5
@@ -28,3 +33,13 @@ jobs:
 
       - name: Ejecutar scraper
         run: xvfb-run python scrapper.py
+      - name: Configurar Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      
+      - name: Commit y push del CSV
+        run: |
+          git add fondos.csv
+          git diff --cached --quiet || git commit -m "Actualizar fondos $(date +'%Y-%m-%d')"
+          git push
