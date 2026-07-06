@@ -20,7 +20,7 @@ else:
     fila1={"Fecha": hoy}
     URL = "https://transacciones.davivienda.com/dinamicos/ComercialServlet?item=fondos&canal=inter&consulta=dafuturo"
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
         page.goto(URL)
         page.wait_for_load_state("networkidle")
