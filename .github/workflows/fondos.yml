@@ -6,8 +6,7 @@ permissions:
 on:
   workflow_dispatch:
   schedule:
-    - cron: '38 18 * * *'   # 8:00 a.m. Colombia (UTC-5)
-
+    - cron: '*/15 * * * *'
 jobs:
   scraper:
     runs-on: ubuntu-latest
