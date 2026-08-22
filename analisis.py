@@ -1,13 +1,16 @@
+import pandas as pd
+import numpy
+import matplotlib.pyplot as plt
+from pathlib import Path
+import matplotlib.dates as mdates
 acciones=["ACCIONES GLOBAL", "ACCIONES COLOMBIA"]
 renta=["RENTA FIJA GLOBAL", "RENTA FIJA PESOS", "SOSTENIBLE GLOBAL"]
 estable=["CAPITAL", "ESTABLE"]
 diver=["DIVER DINAMICO", "DIVER MODERADO", "DIVER CONSERVADOR"]
 internacional=["LIQUIDEZ DOLAR", "FINCA RAIZ INTERNACIONAL", "ORO"]
 favoritos=["ACCIONES COLOMBIA", "RENTA FIJA PESOS", "CAPITAL", "DIVER CONSERVADOR"]
-import pandas as pd
-import numpy
-import matplotlib.pyplot as plt
-from pathlib import Path
+lista=[acciones, renta, estable, diver, internacional, favoritos]
+nombres=["Acciones", "Renta Fija", "Estable", "Diversificación", "Internacional", "Favoritos"]
 archivo = Path(__file__).parent / "fondos.csv"
 df = pd.read_csv(archivo)
 print("1. Resumen de los fondos")
@@ -15,40 +18,18 @@ print("2. regresión cúbica Acciones colombia")
 respuesta = input("Seleccione una opción: ")
 if respuesta == "1":
     fig, axs = plt.subplots(2,3, figsize=(12, 8), sharex=True)
-    for fondo in acciones:
-        axs[0,0].plot(df["Fecha"], df[fondo]/df[fondo].iloc[0], label=fondo)
-        axs[0,0].set_title("Acciones")
-        axs[0,0].legend()
-        axs[0,0].tick_params(axis='x', labelrotation=90)
-    for fondo in renta:
-        axs[0,1].plot(df["Fecha"], df[fondo]/df[fondo].iloc[0], label=fondo)
-        axs[0,1].set_title("Renta Fija")
-        axs[0,1].legend()
-        axs[0,1].tick_params(axis='x', labelrotation=90)
-    for fondo in estable:
-        axs[0,2].plot(df["Fecha"], df[fondo]/df[fondo].iloc[0], label=fondo)
-        axs[0,2].set_title("Estable")
-        axs[0,2].legend()
-        axs[0,2].tick_params(axis='x', labelrotation=90)
-    for fondo in diver:
-        axs[1,0].plot(df["Fecha"], df[fondo]/df[fondo].iloc[0], label=fondo)
-        axs[1,0].set_title("Diversificación")
-        axs[1,0].legend()
-        axs[1,0].tick_params(axis='x', labelrotation=90)
-    for fondo in internacional:
-        axs[1,1].plot(df["Fecha"], df[fondo]/df[fondo].iloc[0], label=fondo)
-        axs[1,1].set_title("Internacional")
-        axs[1,1].legend()
-        axs[1,1].tick_params(axis='x', labelrotation=90)
-    for fondo in favoritos:
-        axs[1,2].plot(df["Fecha"], df[fondo]/df[fondo].iloc[0], label=fondo)
-        axs[1,2].set_title("Favoritos")
-        axs[1,2].legend()
-        axs[1,2].tick_params(axis='x', labelrotation=90)
+    for i in range(6):
+        fondo=lista[i]
+        for f in fondo:
+            axs[i//3,i%3].plot(df["Fecha"], df[f]/df[f].iloc[0], label=f)
+            axs[i//3,i%3].set_title(nombres[i])
+            axs[i//3,i%3].legend()
+            axs[i//3,i%3].tick_params(axis='x', labelrotation=90)
+            axs[i//3,i%3].xaxis.set_major_locator(mdates.DayLocator(interval=5))
     plt.show()
 if respuesta == "2":
     datos=df["ACCIONES COLOMBIA"]/df["ACCIONES COLOMBIA"].iloc[0]
-    n=5
+    n=3
     diseno=numpy.zeros((len(df),n+1))
     diseno[:,0]=1
     for i in range(1,n+1):
